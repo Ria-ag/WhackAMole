@@ -16,7 +16,6 @@ Adafruit_ADXL343 accel = Adafruit_ADXL343(1);
 
 const int JOY_X_PIN  = A0;
 const int JOY_Y_PIN  = A1;
-const int JOY_SW_PIN = 2;
 
 unsigned long lastSend = 0;
 const unsigned long SEND_MS = 30; 
@@ -29,7 +28,6 @@ String incomingCmd = "";
 
 void setup() {
   Serial.begin(115200);
-  pinMode(JOY_SW_PIN, INPUT_PULLUP);
 
   if (!display.begin(SSD1306_SWITCHCAPVCC, OLED_ADDR)) {
     while (true) delay(100);
@@ -86,7 +84,6 @@ void loop() {
 void streamTelemetry() {
   int jX = analogRead(JOY_X_PIN);
   int jY = analogRead(JOY_Y_PIN);
-  int jSW = digitalRead(JOY_SW_PIN) == LOW ? 1 : 0;
 
   sensors_event_t event;
   accel.getEvent(&event);
@@ -99,7 +96,6 @@ void streamTelemetry() {
   // Send data in one line so easy for p5.js to split
   Serial.print(jX);     Serial.print(",");
   Serial.print(jY);     Serial.print(",");
-  Serial.print(jSW);    Serial.print(",");
   Serial.print(ax, 3);  Serial.print(",");
   Serial.print(ay, 3);  Serial.print(",");
   Serial.println(az, 3);
